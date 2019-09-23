@@ -1,7 +1,63 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h1>Agro Institute</h1>
-<p>New Green Revolution</p>
+<canvas id="app"></canvas>
 </body>
+  <style>
+  #app {
+			position: absolute;
+			top: 0; left: 0; right: 0;
+      opacity: 0.5;
+  }</style>
+  <script>
+    var canvas  = document.getElementById("app"),
+		ctx		= canvas.getContext("2d"),
+		options = {
+			opacity: 0.05,
+			count: 1,							// Количество отрисованных элементов за один раз
+			fps: 60,							// скорость рендера
+			color: "hsl(hue, 100%, 50%)",		// цвет куба
+			hue: 0,								// тон цвета
+			divisionSpeed: 100					// делитель скорости, чем больше тем медленей скорость смены цвета
+		};
+
+	canvas.width  = window.innerWidth % 10 ? ( Math.floor( window.innerWidth / 10 ) * 10 ) : window.innerWidth;
+	canvas.height = window.innerHeight % 10 ? ( Math.floor( window.innerHeight / 10 ) * 10 ) : window.innerHeight;
+
+	var width     = canvas.width,
+		height 	  = canvas.height;
+
+	function Init(){
+			window.requestAnimationFrame(Init);  
+
+		Step();									// Отрисовка куба
+	}
+	function Step() {
+		
+		for(var i = 0; i < options.count; i++){
+			if(options.hue > 120) options.hue = 120;								// значение тона в цикле от 0 до 360
+			else options.hue = options.hue + 120
+      ;	
+
+			var fillColor = options.color.replace("hue", options.hue);			// вырезаем шаблон из цвета куба с помощью поиска подстроки и её замены
+      widthHeight = Math.random() *50;
+			ctx.fillStyle = fillColor;								// заливаем будущий куб
+			ctx.fillRect( Math.random() * width, Math.random() * height, widthHeight, widthHeight);		// Отрисовываем куб в рандомном месте на канвасе с рандомным размером
+		}
+
+		ctx.fillStyle = "rgba(255,255,255,"+ options.opacity +")";
+		ctx.fillRect(0, 0, width, height);	
+	}
+
+
+	Init();
+
+	window.addEventListener("resize", function(){
+		canvas.width  = window.innerWidth % 10 ? ( Math.floor( window.innerWidth / 10 ) * 10 ) : window.innerWidth;
+		canvas.height = window.innerHeight % 10 ? ( Math.floor( window.innerHeight / 10 ) * 10 ) : window.innerHeight;
+
+		width     = canvas.width,
+		height 	  = canvas.height;
+	});
+  </script>
 </html>
